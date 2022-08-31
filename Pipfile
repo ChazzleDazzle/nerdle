@@ -1,0 +1,20 @@
+[[source]]
+name = "DISCO"
+url = "https://${ARTIFACTORY_USER_NAME}:${ARTIFACTORY_API_TOKEN}@csdisco.jfrog.io/csdisco/api/pypi/pypi/simple"
+verify_ssl = true
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+types-pytz = "*"
+types-requests = "*"
+
+[packages]
+colorama = "*"
+
+
+[requires]
+python_version = "3.10"
+
+[pipenv]
+allow_prereleases = true
