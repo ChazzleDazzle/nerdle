@@ -1,8 +1,3 @@
-[[source]]
-name = "DISCO"
-url = "https://${ARTIFACTORY_USER_NAME}:${ARTIFACTORY_API_TOKEN}@csdisco.jfrog.io/csdisco/api/pypi/pypi/simple"
-verify_ssl = true
-
 [dev-packages]
 black = "*"
 flake8 = "*"
