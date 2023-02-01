@@ -6,12 +6,20 @@ from words import WordList
 
 class WordleGame:
     def __init__(self):
-        self.word_list = self._set_word_list()
+        self.guesses = []
+        self.game_over = False
         self.game_word = self._set_game_word()
+
+    @property
+    def word_list(self):
+        return WordList().match_list
+
+    def _set_game_word(self):
+        return self.word_list[floor(uniform(0, len(self.word_list)))]
 
     def make_guess(self, guess):
         if guess == self.game_word:
-            return f"You win!  The word was {self.game_word}!"
+            return self.win_response()
         letter_response = [
             {"letter": guess[0], "is_pos": False, "is_used": False},
             {"letter": guess[1], "is_pos": False, "is_used": False},
@@ -26,8 +34,8 @@ class WordleGame:
                     letter_response[idx]["is_pos"] = True
         return letter_response
 
-    def _set_word_list(self):
-        return WordList().match_list
+    def win_response(self):
+        return f"Correct!  The word was {self.game_word.upper()}!\nYou won in {len(self.guesses)} turns!"
 
-    def _set_game_word(self):
-        return self.word_list[floor(uniform(0, len(self.word_list)))]
+    def fail_response(self):
+        return f"Tough luck!  You lost.  The correct word was {self.game_word.upper()}."

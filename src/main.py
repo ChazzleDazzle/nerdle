@@ -5,7 +5,6 @@ import re
 import colorama
 from colorama import Fore, Back, Style
 
-from find_word import find_words
 from models import WordleGame
 
 colorama.init()
@@ -13,35 +12,38 @@ colorama.init()
 
 def main():
     wordle = WordleGame()
-    game_over = False
-    word_params = {"not_letters": [], "any_letters": []}
-    guesses = 0
-    while not game_over:
-        guess = validate_guess(wordle.word_list, input("please guess a word: "))
-        if not guess:
+    max_guesses = 6
 
-            continue
-        response = wordle.make_guess(guess)
-        guesses += 1
-        if isinstance(response, str):
-            print(response)
-            print(f"Number of guesses: {guesses}")
-            game_over = True
-            continue
-        print(
-            f"{colorize_letter(response[0])} {colorize_letter(response[1])} {colorize_letter(response[2])} {colorize_letter(response[3])} {colorize_letter(response[4])}"
-        )
-        for l in response:
-            if not l.get("is_used"):
-                word_params["not_letters"].append(l.get("letter"))
-            else:
-                if l.get("is_pos"):
-                    position = guess.find(l.get("letter")) + 1
-                    word_params[f"l{position}"] = l.get("letter")
+    word_params = {"not_letters": [], "any_letters": []}
+    while not wordle.game_over:
+        if len(wordle.guesses) < max_guesses:
+            guess = validate_guess(wordle.word_list, input("Enter your guess: ").lower())
+            if not guess:
+                continue
+            wordle.guesses.append(guess)
+            response = wordle.make_guess(guess)
+            if isinstance(response, str):
+                print(response)
+                wordle.game_over = True
+                continue
+            print(
+                f"{colorize_letter(response[0])} {colorize_letter(response[1])} {colorize_letter(response[2])} {colorize_letter(response[3])} {colorize_letter(response[4])}"
+            )
+            for l in response:
+                if not l.get("is_used"):
+                    word_params["not_letters"].append(l.get("letter"))
                 else:
-                    word_params["any_letters"].append(l.get("letter"))
-        print(f"Not used: {word_params.get('not_letters')}")
-        # print(find_words(**word_params))
+                    if l.get("is_pos"):
+                        position = guess.find(l.get("letter")) + 1
+                        word_params[f"l{position}"] = l.get("letter")
+                    else:
+                        word_params["any_letters"].append(l.get("letter"))
+            print(f"{max_guesses - len(wordle.guesses)} guesses remaining...")
+            print(f"Not used: {set(word_params.get('not_letters'))}")
+        else:
+            wordle.game_over = True
+            print(wordle.fail_response())
+
 
 
 def colorize_letter(l: dict) -> str:
@@ -53,6 +55,7 @@ def colorize_letter(l: dict) -> str:
 
 
 def validate_guess(word_list, guess):
+    # Guesses are 5 characters long, containing only letters a-z, case insensitive.
     p = re.compile("^[a-zA-Z]{5}$")
     if p.search(guess):
         if guess in word_list:

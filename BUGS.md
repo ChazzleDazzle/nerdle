@@ -16,21 +16,6 @@
 
 ## Find_word
 
-1. [CLOSED] I should be able to indicate that a letter is "Any letter, but not X position". 
-    * ex: The word is SHRUG, and I guess CRIMP.  I get back that R is a letter, but does not go in the second position. 
-    * In the above example, I should be able to indicate that R is any letter except l2. 
-    * Maybe an -nl[12345] flag?
-
-1. [CLOSED] any_letter means that the word must contain that letter.
-    * ex: currently, if I supply the tool with `-a asrb`, I get words like "union".
-
-1. [IN_PROGRESS] Suggest a word to choose next? 
+2. [IN PROGRESS] Suggest a word to choose next? 
     * [CLOSED] Start off by choosing a random word from the list. 
-    * [OPEN] Could implement a calculation of greatest entropy later. 
-
-1. [OPEN] Indicate that a letter is not repeated.  
-    * ex: The word is GROIN, and I guess BROOK.
-        * In the example above, the user should be able to indicate that the second O is not repeated in position 4, or anywhere else. 
-    * ex: The word is ABACK, and I guess APNEA. 
-        * In the example above, the user should be able to indicate that the second A is used somewhere, but not in this position.
-
+    * [OPEN] Could implement a calculation of greatest entropy later.
